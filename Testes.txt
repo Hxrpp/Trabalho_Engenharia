@@ -12,7 +12,7 @@ Resumo dos testes:
 
 6 - Caixa-Branca = Testar fluxos internos.
 
-7 - Teste Funcional = Verificar se os cálculos e fluxos funcionam como esperado
+7 - Teste Funcional = Verificar se os cálculos e fluxos funcionam como esperado.
 
 8 - Teste de Aceitação do Usuário = Submter o teste à pessoas da sala.
 
