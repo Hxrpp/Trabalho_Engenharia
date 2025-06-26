@@ -1,0 +1,11 @@
+Resumo dos testes
+
+Teste de Unidade (TDD) = Pode ser aplicado às funções de cálculo individuais
+Teste Positivo-Negativo (TDD) = Testar entradas válidas e inválidas nas funções
+Teste de Integração (TDD) = Integração entre interface + lógica de cálculo pode ser testada
+Teste de Regressão = Após mudanças, você pode reexecutar os testes e documentar correções
+Caixa-Preta = A interface permite testar entradas/saídas sem olhar o código
+Caixa-Branca = Você tem acesso ao código-fonte, então consegue testar os fluxos internos
+Teste Funcional = Pode verificar se os cálculos e fluxos funcionam como esperado
+Teste de Aceitação do Usuário = Você pode submeter a usuários finais (ex: colegas, professores)
+Teste de Interface = Pode testar exibição, interação, campos, layout, etc.
