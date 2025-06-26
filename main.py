@@ -2,70 +2,69 @@ import ttkbootstrap as tb
 from ttkbootstrap.constants import *
 from tkinter import messagebox
 from PIL import Image, ImageTk
+import calculos  # importa suas funções de cálculo
 
-
-# Permitir apenas números, vírgula e ponto:
 def somente_numeros(char):
     if char == "":
         return True
     return all(c.isdigit() or c in [".", ","] for c in char) and char.count('.') <= 1 and char.count(',') <= 1
 
-
-# Calcúlos:
 def calcular():
     try:
         analise = combo.get()
         if analise == "Umidade":
-            peso_inicial = float(entry1.get().replace(",", "."))
-            peso_final = float(entry2.get().replace(",", "."))
-            resultado = ((peso_inicial - peso_final) / peso_inicial) * 100
+            resultado = calculos.umidade(
+                float(entry1.get().replace(",", ".")),
+                float(entry2.get().replace(",", "."))
+            )
             messagebox.showinfo("Resultado", f"Umidade: {resultado:.2f}%")
 
         elif analise == "Cinzas":
-            peso_amostra = float(entry1.get().replace(",", "."))
-            peso_residuo = float(entry2.get().replace(",", "."))
-            resultado = (peso_residuo / peso_amostra) * 100
+            resultado = calculos.cinzas(
+                float(entry1.get().replace(",", ".")),
+                float(entry2.get().replace(",", "."))
+            )
             messagebox.showinfo("Resultado", f"Cinzas: {resultado:.2f}%")
 
         elif analise == "Proteínas (Kjeldahl)":
-            volume_acido = float(entry1.get().replace(",", "."))
-            fator = float(entry2.get().replace(",", "."))
-            peso_amostra = float(entry3.get().replace(",", "."))
-            resultado = (volume_acido * fator * 1.4007) / peso_amostra
+            resultado = calculos.proteinas_kjeldahl(
+                float(entry1.get().replace(",", ".")),
+                float(entry2.get().replace(",", ".")),
+                float(entry3.get().replace(",", "."))
+            )
             messagebox.showinfo("Resultado", f"Proteína: {resultado:.2f}%")
 
         elif analise == "Lipídios (Soxhlet)":
-            peso_residuo = float(entry1.get().replace(",", "."))
-            peso_amostra = float(entry2.get().replace(",", "."))
-            resultado = (peso_residuo / peso_amostra) * 100
+            resultado = calculos.lipidios_soxhlet(
+                float(entry1.get().replace(",", ".")),
+                float(entry2.get().replace(",", "."))
+            )
             messagebox.showinfo("Resultado", f"Lipídios: {resultado:.2f}%")
 
         elif analise == "pH":
             valor_ph = float(entry1.get().replace(",", "."))
-            if valor_ph < 7:
-                descricao = "Ácida"
-            elif valor_ph == 7:
-                descricao = "Neutra"
-            else:
-                descricao = "Básica"
-            messagebox.showinfo("Resultado", f"pH: {valor_ph:.2f} - Solução {descricao}")
+            tipo = calculos.ph(valor_ph)
+            messagebox.showinfo("Resultado", f"pH: {valor_ph:.2f} - Solução {tipo}")
 
         elif analise == "Acidez Titulável":
-            volume_NaOH = float(entry1.get().replace(",", "."))
-            normalidade = float(entry2.get().replace(",", "."))
-            fator = float(entry3.get().replace(",", "."))
-            peso_amostra = float(entry4.get().replace(",", "."))
-            resultado = (volume_NaOH * normalidade * fator * 100) / peso_amostra
+            resultado = calculos.acidez_titulavel(
+                float(entry1.get().replace(",", ".")),
+                float(entry2.get().replace(",", ".")),
+                float(entry3.get().replace(",", ".")),
+                float(entry4.get().replace(",", "."))
+            )
             messagebox.showinfo("Resultado", f"Acidez Titulável: {resultado:.2f}%")
 
         elif analise == "Densidade":
-            massa = float(entry1.get().replace(",", "."))
-            volume = float(entry2.get().replace(",", "."))
-            resultado = massa / volume
+            resultado = calculos.densidade(
+                float(entry1.get().replace(",", ".")),
+                float(entry2.get().replace(",", "."))
+            )
             messagebox.showinfo("Resultado", f"Densidade: {resultado:.2f} g/mL")
 
         else:
             messagebox.showwarning("Erro", "Selecione uma análise válida.")
+
     except ValueError:
         messagebox.showerror("Erro", "Preencha todos os campos com valores numéricos válidos.")
 
@@ -103,23 +102,20 @@ def atualizar_campos(event=None):
         elif i == 3: entry4 = entry
     frame_inputs.columnconfigure(1, weight=1)
 
-
-# Janela principal:
+# Janela principal
 root = tb.Window(themename="flatly")
 root.title("Cálculo de Fórmulas - Análise de Alimentos")
 root.geometry("480x530")
 root.resizable(True, True)
 
-
-# Cabeçalho:
+# Cabeçalho
 header = tb.Frame(root, bootstyle="dark", padding=10)
 header.pack(side="top", fill="x")
 label_header = tb.Label(header, text="Cálculo Automático de Fórmulas",
                         font=("Segoe UI", 14, "bold"), bootstyle="inverse-dark")
 label_header.pack()
 
-
-# Seleção de análise:
+# Seleção de análise
 frm_top = tb.Frame(root, padding=15)
 frm_top.pack(fill="x")
 label = tb.Label(frm_top, text="Selecione o tipo de análise:", font=("Segoe UI", 12, "bold"))
@@ -130,18 +126,15 @@ combo = tb.Combobox(frm_top, values=[
 combo.pack(side="right", fill="x", expand=True, padx=(10,0))
 combo.bind("<<ComboboxSelected>>", atualizar_campos)
 
-
-# Área de entrada dinâmica:
+# Área de entrada dinâmica
 frame_inputs = tb.Frame(root, padding=15)
 frame_inputs.pack(fill="both", expand=True)
 
-
-# Botão calcular:
+# Botão calcular
 btn_calcular = tb.Button(root, text="Calcular", bootstyle="success", command=calcular)
 btn_calcular.pack(pady=15, ipadx=15, ipady=8)
 
-
-# Imagem decorativa:
+# Imagem decorativa (se houver)
 try:
     img = Image.open("tubo_ensaio.png")
     nova_largura = 150
