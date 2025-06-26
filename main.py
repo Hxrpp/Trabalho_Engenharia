@@ -2,7 +2,7 @@ import ttkbootstrap as tb
 from ttkbootstrap.constants import *
 from tkinter import messagebox
 from PIL import Image, ImageTk
-import calculos  # importa suas funções de cálculo
+import calculos
 
 def somente_numeros(char):
     if char == "":
@@ -102,20 +102,23 @@ def atualizar_campos(event=None):
         elif i == 3: entry4 = entry
     frame_inputs.columnconfigure(1, weight=1)
 
-# Janela principal
+
+# Janela principal:
 root = tb.Window(themename="flatly")
 root.title("Cálculo de Fórmulas - Análise de Alimentos")
 root.geometry("480x530")
 root.resizable(True, True)
 
-# Cabeçalho
+
+# Header:
 header = tb.Frame(root, bootstyle="dark", padding=10)
 header.pack(side="top", fill="x")
 label_header = tb.Label(header, text="Cálculo Automático de Fórmulas",
                         font=("Segoe UI", 14, "bold"), bootstyle="inverse-dark")
 label_header.pack()
 
-# Seleção de análise
+
+# Seleção de análise:
 frm_top = tb.Frame(root, padding=15)
 frm_top.pack(fill="x")
 label = tb.Label(frm_top, text="Selecione o tipo de análise:", font=("Segoe UI", 12, "bold"))
@@ -126,15 +129,18 @@ combo = tb.Combobox(frm_top, values=[
 combo.pack(side="right", fill="x", expand=True, padx=(10,0))
 combo.bind("<<ComboboxSelected>>", atualizar_campos)
 
-# Área de entrada dinâmica
+
+# Área de entrada dinâmica:
 frame_inputs = tb.Frame(root, padding=15)
 frame_inputs.pack(fill="both", expand=True)
 
-# Botão calcular
+
+# Botão calcular:
 btn_calcular = tb.Button(root, text="Calcular", bootstyle="success", command=calcular)
 btn_calcular.pack(pady=15, ipadx=15, ipady=8)
 
-# Imagem decorativa (se houver)
+
+# Imagem dos tubos de ensaio:
 try:
     img = Image.open("tubo_ensaio.png")
     nova_largura = 150
